@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+<div class="container mt-5">
+{#    <a class="btn btn-success ml-3 mt-3" href="{% url 'home' %}">Orqaga qaytish</a>#}
+    <div class="row justify-content-center">
+        {% if messages %}
+            <div class="header">
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="col-md-6">
+            <!-- File Upload Form -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <h1 class="fw-bold text-center mb-5">FAYLNI YUKLANG</h1>
+                <div class="d-flex flex-row">
+                    <input type="file" required name="excel_file" class="form-control">
+                    <button type="submit" class="btn btn-dark" style="margin-left: 10px">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
