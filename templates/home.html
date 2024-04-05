@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Bootstrap Table Example</title>
+    <style>
+        .top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+
+</head>
+
+
+<body>
+<div class="row m-2">
+    <div class="container-fluid m-5">
+        <a class="btn btn-success ml-2 mt-2 mb-2" href="{% url 'import_excel' %}">Faylni yuborish</a>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary top-right" style="margin: 80px">Logout</button>
+        </form>
+        <h2 class="ml-1">Mijozlar ro'yxati</h2>
+
+        <!-- Search Form -->
+        <form method="get" class="form-inline" action="{% url 'home' %}">
+            {% csrf_token %}
+            {{ search_form.as_p }}
+            <button type="submit" class="btn btn-primary ml-2 mt-2">Search</button>
+            <a class="btn btn-success ml-2 mt-2" href="{% url 'home' %}">Clear</a>
+        </form>
+
+        {% if current_page %}
+            <!-- Paginated Search Results -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">T/r</th>
+                    <th scope="col">Claim id</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Client id</th>
+                    <th scope="col">Credit sum</th>
+                    <th scope="col">Client type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in current_page %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.claim_id }}</td>
+                        <td>{{ item.client_name }}</td>
+                        <td>{{ item.client_id }}</td>
+                        <td>{{ item.credit_sum }}</td>
+                        <td>{{ item.client_type }}</td>
+                        <!-- Add other data fields as needed -->
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+            <div class="pagination justify-content-center">
+                <ul class="pagination">
+                    {% if current_page.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ current_page.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for i in page_range %}
+                        {% if i %}
+                            {% if current_page.number == i %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if current_page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ current_page.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+

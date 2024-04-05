@@ -1,36 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-</head>
-<body>
-<div class="container mt-5">
-{#    <a class="btn btn-success ml-3 mt-3" href="{% url 'home' %}">Orqaga qaytish</a>#}
-    <div class="row justify-content-center">
+{% load crispy_forms_tags %}
+{% block title %}
+
+{% endblock title %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+{% block content %}
+    <div class="container mt-5">
+        <a class="btn btn-success ml-3 mt-3" href="{% url 'home' %}">Orqaga qaytish</a>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <!-- File Upload Form -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <h1 class="fw-bold text-center mb-5">FAYLNI YUKLANG</h1>
+                    <div class="d-flex flex-row">
+                        <input type="file" required name="excel_file" class="form-control">
+                        <button type="submit" id="reload-btn" class="btn btn-dark" style="margin-left: 10px">Import
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="messageDiv">
         {% if messages %}
-            <div class="header">
+            <div style="z-index: 312;" class="shadow-sm position-fixed end-0 bottom-0 mt-4">
                 {% for message in messages %}
-                    <div class="message">{{ message }}</div>
+                    <div style="width: 20rem; opacity:0.9 " class=" m-3 alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
                 {% endfor %}
             </div>
         {% endif %}
-        <div class="col-md-6">
-            <!-- File Upload Form -->
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <h1 class="fw-bold text-center mb-5">FAYLNI YUKLANG</h1>
-                <div class="d-flex flex-row">
-                    <input type="file" required name="excel_file" class="form-control">
-                    <button type="submit" class="btn btn-dark" style="margin-left: 10px">Import</button>
-                </div>
-            </form>
-        </div>
     </div>
-</div>
-</body>
-</html>
+
+    <script>
+        function hideMessage() {
+            var messageDiv = document.getElementById('messageDiv');
+            if (messageDiv) {
+                setTimeout(function () {
+                    messageDiv.style.display = 'none';
+                }, 4000); // 4000 milliseconds = 4 seconds
+            }
+        }
+
+        window.onload = function () {
+            hideMessage();
+        };
+    </script>
+{% endblock %}

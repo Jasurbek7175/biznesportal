@@ -1,14 +1,16 @@
 from rest_framework import serializers
-from .models import Application
+from .models import Application, ClientInfo, CreditPay
 
 
 class AppSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='application_id')
+
     class Meta:
         model = Application
         fields = [
+            "id",
             "mfo",
             "branch_id",
-            "application_id",
             "state",
             "claim_id",
             "region_code",
@@ -41,3 +43,29 @@ class AppSerializer(serializers.ModelSerializer):
             "account_16405_sum",
             "account_16413_sum",
         ]
+
+
+class ClientInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientInfo
+        fields = ['request_id', 'application_id']
+
+
+class CreditPaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditPay
+        fields = [
+                  'mfo',
+                  'account',
+                  'branch_id',
+                  'account_status',
+                  'turnover_db_20208',
+                  'turnover_cr_20208',
+                  'turnover_cr_20218',
+                  'turnover_db_20218',
+                  'turnover_cr_22618',
+                  'turnover_db_22618',
+                  'turnover_db_20212',
+                  'turnover_cr_20212',
+                  'saldo_90963',
+                  ]
