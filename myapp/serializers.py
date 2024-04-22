@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Application, ClientInfo, CreditPay
+from .models import Application, ClientInfo, CreditPay, CreditPayment
 
 
 class AppSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class AppSerializer(serializers.ModelSerializer):
             "mfo",
             "branch_id",
             "state",
-            "claim_id",
+            # "claim_id",
             "region_code",
             "district_code",
             "client_type",
@@ -55,17 +55,41 @@ class CreditPaySerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditPay
         fields = [
-                  'mfo',
-                  'account',
-                  'branch_id',
-                  'account_status',
-                  'turnover_db_20208',
-                  'turnover_cr_20208',
-                  'turnover_cr_20218',
-                  'turnover_db_20218',
-                  'turnover_cr_22618',
-                  'turnover_db_22618',
-                  'turnover_db_20212',
-                  'turnover_cr_20212',
-                  'saldo_90963',
-                  ]
+            'mfo',
+            'account',
+            'branch_id',
+            'account_status',
+            'turnover_db_20208',
+            'turnover_cr_20208',
+            'turnover_cr_20218',
+            'turnover_db_20218',
+            'turnover_cr_22618',
+            'turnover_db_22618',
+            'turnover_db_20212',
+            'turnover_cr_20212',
+            'saldo_90963',
+        ]
+
+
+class CreditPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditPayment
+        fields = [
+            'branch_id',
+            'cl_mfo',
+            'cl_account',
+            'cl_name',
+            'cl_id',
+            'ca_mfo',
+            'ca_account',
+            'ca_name',
+            'ca_id',
+            'doc_id',
+            'doc_date',
+            'doc_num',
+            'pay_sum',
+            'pay_code',
+            'pay_note',
+            'pay_state',
+            'pay_date'
+        ]

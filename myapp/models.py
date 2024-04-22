@@ -17,7 +17,7 @@ class Application(models.Model):
     application_id = models.IntegerField()
     loan_id = models.IntegerField()
     state = models.CharField(max_length=255)
-    claim_id = models.IntegerField()
+    # claim_id = models.IntegerField()
     region_code = models.CharField(max_length=5)
     district_code = models.CharField(max_length=5)
     client_type = models.CharField(max_length=20)
@@ -49,7 +49,7 @@ class Application(models.Model):
     account_16413_sum = models.CharField(max_length=25, null=True)
 
     def __str__(self):
-        return self.claim_id
+        return self.loan_id
 
 
 class ClientInfo(models.Model):
@@ -85,3 +85,27 @@ class CreditPay(models.Model):
 
     def __str__(self):
         return self.loan_id
+
+
+class CreditPayment(models.Model):
+    branch_id = models.CharField(max_length=10)
+    loan_id = models.IntegerField()
+    cl_mfo = models.CharField(max_length=10)
+    cl_account = models.CharField(max_length=25)
+    cl_name = models.CharField(max_length=255)
+    cl_id = models.CharField(max_length=10)
+    ca_mfo = models.CharField(max_length=10)
+    ca_account = models.CharField(max_length=20)
+    ca_name = models.CharField(max_length=255)
+    ca_id = models.BigIntegerField()
+    doc_id = models.CharField(max_length=10)
+    doc_date = models.DateField()
+    doc_num = models.IntegerField()
+    pay_sum = models.BigIntegerField()
+    pay_code = models.CharField(max_length=10)
+    pay_note = models.CharField(max_length=200)
+    pay_state = models.IntegerField()
+    pay_date = models.DateField()
+
+    def __str__(self):
+        return self.cl_name

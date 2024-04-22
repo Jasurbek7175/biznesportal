@@ -2,11 +2,11 @@ from django.shortcuts import render
 from openpyxl.reader.excel import load_workbook
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from .models import Application, ClientInfo, CreditPay
+from .models import Application, ClientInfo, CreditPay, CreditPayment
 from django.contrib import messages
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import AppSerializer, ClientInfoSerializer, CreditPaySerializer
+from .serializers import AppSerializer, ClientInfoSerializer, CreditPaySerializer, CreditPaymentSerializer
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -33,7 +33,7 @@ def import_from_excel(request):
             ws = wb.active
             instances = []
             for row in ws.iter_rows(min_row=2, values_only=True):
-                if not Application.objects.filter(claim_id=row[5]).exists():
+                if not Application.objects.filter(loan_id=row[5]).exists():
                     try:
                         change_date = datetime.strptime(row[4], '%d.%m.%Y').date()
                         credit_date = datetime.strptime(row[12], '%d.%m.%Y').date()
@@ -42,12 +42,37 @@ def import_from_excel(request):
                         last_pay_date = datetime.strptime(row[19], '%d.%m.%Y').date()
 
                         a = Application.objects.create(
+                            # mfo=row[0],
+                            # branch_id=row[1],
+                            # application_id=row[2],
+                            # state=row[3],
+                            # change_date=change_date,
+                            # claim_id=row[5],
+                            # region_code=row[6],
+                            # district_code=row[7],
+                            # client_type=row[8],
+                            # client_name=row[9],
+                            # client_id=row[10],
+                            # credit_num=row[11],
+                            # credit_date=credit_date,
+                            # credit_term_date=credit_term_date,
+                            # credit_sum=row[14],
+                            # credit_percent=row[15],
+                            # credit_account=row[16],
+                            # total_pay_sum=row[17],
+                            # first_pay_date=first_pay_date,
+                            # last_pay_date=last_pay_date,
+                            # debt_sum=row[20],
+                            # loan_id=row[21],
+                            # credit_purpose_code=row[22],
+                            # credit_purpose_name=row[23],
                             mfo=row[0],
                             branch_id=row[1],
                             application_id=row[2],
                             state=row[3],
                             change_date=change_date,
-                            claim_id=row[5],
+                            loan_id=row[5],
+                            # claim_id=row[5],
                             region_code=row[6],
                             district_code=row[7],
                             client_type=row[8],
@@ -63,9 +88,13 @@ def import_from_excel(request):
                             first_pay_date=first_pay_date,
                             last_pay_date=last_pay_date,
                             debt_sum=row[20],
-                            loan_id=row[21],
+                            overdue_debt_sum=row[21],
                             credit_purpose_code=row[22],
                             credit_purpose_name=row[23],
+                            account_16309_sum=row[24],
+                            account_16323_sum=row[25],
+                            account_16377_sum=row[26],
+                            account_16379_sum=row[27],
                         )
                         instances.append(a)
                     except Exception as e:
@@ -90,7 +119,7 @@ def credit_info_from_excel(request):
             ws = wb.active
             instances = []
             for row in ws.iter_rows(min_row=2, values_only=True):
-                if not CreditPay.objects.filter(loan_id=row[0]).exists():
+                if not CreditPay.objects.filter(claim_id=row[0]).exists():
                     try:
                         a = CreditPay.objects.create(
                             loan_id=row[0],
@@ -121,6 +150,77 @@ def credit_info_from_excel(request):
         else:
             messages.warning(request, 'You must only excel file upload')
     return render(request, 'upload_file.html')
+
+
+@login_required()
+def credit_payment_from_excel(request):
+    if request.method == 'POST':
+        excel_file = request.FILES.get('excel_file')
+        if excel_file.name.endswith('.xlsx'):
+            wb = load_workbook(excel_file)
+            ws = wb.active
+            instances = []
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                if row:
+                    try:
+                        doc_date = datetime.strptime(row[10], '%d.%m.%Y')
+                        credit_date = datetime.strptime(row[16], '%d.%m.%Y')
+
+                        a = CreditPayment.objects.create(
+                            branch_id=row[0],
+                            cl_mfo=row[1],
+                            cl_account=row[2],
+                            cl_name=row[3],
+                            cl_id=row[4],
+                            ca_mfo=row[5],
+                            ca_account=row[6],
+                            ca_name=row[7],
+                            ca_id=row[8],
+                            doc_id=row[9],
+                            doc_date=doc_date,
+                            doc_num=row[11],
+                            pay_sum=row[12],
+                            pay_code=row[13],
+                            pay_note=row[14],
+                            pay_state=row[15],
+                            pay_date=credit_date,
+                            loan_id=row[18]
+                        )
+                        instances.append(a)
+                    except Exception as e:
+                        print(f"Error processing row {row}: {e}")
+                else:
+                    messages.info(request, 'Your rows are not correspond to save it')
+            if instances:
+                messages.success(request, 'Your file successfully loaded')
+            else:
+                messages.info(request, 'Your rows are not correspond to save it')
+        else:
+            messages.warning(request, 'You must only excel file upload')
+    return render(request, 'upload_file.html')
+
+
+class PaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        request_id = request.query_params.get('request_id')
+        loan_id = request.query_params.get('loan_id')
+        brb = request.query_params.get('date')
+        changed_date = datetime.strptime(brb, '%d.%m.%Y').strftime("%Y-%m-%d")
+        if CreditPayment.objects.filter(loan_id=loan_id).exists():
+            try:
+                # ClientInfo.objects.create(request_id=request_id, application_id=application_id)
+                application_obj = CreditPayment.objects.filter(loan_id=loan_id, pay_date=changed_date)
+                serializer = CreditPaymentSerializer(application_obj, many=True)
+                return Response(serializer.data)
+            except CreditPayment.DoesNotExist:
+                return Response({'error': 'Object not found'}, status=status.HTTP_404_NOT_FOUND)
+        elif not CreditPayment.objects.filter(loan_id=loan_id).exists():
+            return Response({'error': '00001',
+                             'message': "loan_id or date not found",
+                             'timestamp': date,
+                             'status': 404})
 
 
 class ApplicationView(APIView):
@@ -195,10 +295,10 @@ def home(request):
     search_form = ApplicationSearchForm(request.GET)
 
     if search_form.is_valid():
-        claim_id = search_form.cleaned_data.get('claim_id')
+        loan_id = search_form.cleaned_data.get('loan_id')
 
-        if claim_id:
-            queryset = queryset.filter(claim_id__icontains=claim_id)
+        if loan_id:
+            queryset = queryset.filter(loan_id__icontains=loan_id)
 
     paginator = Paginator(queryset, items_per_page)
 
