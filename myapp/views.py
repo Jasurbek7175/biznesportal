@@ -42,30 +42,6 @@ def import_from_excel(request):
                         last_pay_date = datetime.strptime(row[19], '%d.%m.%Y').date()
 
                         a = Application.objects.create(
-                            # mfo=row[0],
-                            # branch_id=row[1],
-                            # application_id=row[2],
-                            # state=row[3],
-                            # change_date=change_date,
-                            # claim_id=row[5],
-                            # region_code=row[6],
-                            # district_code=row[7],
-                            # client_type=row[8],
-                            # client_name=row[9],
-                            # client_id=row[10],
-                            # credit_num=row[11],
-                            # credit_date=credit_date,
-                            # credit_term_date=credit_term_date,
-                            # credit_sum=row[14],
-                            # credit_percent=row[15],
-                            # credit_account=row[16],
-                            # total_pay_sum=row[17],
-                            # first_pay_date=first_pay_date,
-                            # last_pay_date=last_pay_date,
-                            # debt_sum=row[20],
-                            # loan_id=row[21],
-                            # credit_purpose_code=row[22],
-                            # credit_purpose_name=row[23],
                             mfo=row[0],
                             branch_id=row[1],
                             application_id=row[2],
@@ -122,21 +98,19 @@ def credit_info_from_excel(request):
                 if CreditPay.objects.filter(loan_id=row[0]).delete():
                     try:
                         a = CreditPay.objects.create(
-                            loan_id=row[0],
-                            nibbd_code=row[1],
-                            mfo=row[2],
-                            account=row[3],
-                            branch_id=row[4],
-                            account_status=row[5],
-                            turnover_db_20208=row[6],
-                            turnover_cr_20208=row[7],
-                            turnover_cr_20218=row[8],
-                            turnover_db_20218=row[9],
-                            turnover_cr_22618=row[10],
-                            turnover_db_22618=row[11],
-                            turnover_db_20212=row[12],
-                            turnover_cr_20212=row[13],
-                            saldo_90963=row[14]
+                            loan_id=1,
+                            mfo=row[0],
+                            account=row[1],
+                            nibbd_code=row[2],
+                            branch_id=row[3],
+                            account_status=row[4],
+                            turnover_db_20208=row[5],
+                            turnover_cr_20208=row[6],
+                            turnover_db_20212=row[7],
+                            turnover_cr_20212=row[8],
+                            turnover_cr_20218=row[9],
+                            turnover_db_20218=row[10],
+                            saldo_90963=row[11]
                         )
                         instances.append(a)
                     except Exception as e:

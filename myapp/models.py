@@ -73,15 +73,13 @@ class CreditPay(models.Model):
     account = models.CharField(max_length=25)
     branch_id = models.CharField(max_length=10)
     account_status = models.IntegerField()
-    turnover_db_20208 = models.BigIntegerField(null=True)
-    turnover_cr_20208 = models.BigIntegerField(null=True)
-    turnover_cr_20218 = models.BigIntegerField(null=True)
-    turnover_db_20218 = models.BigIntegerField(null=True)
-    turnover_cr_22618 = models.BigIntegerField(null=True)
-    turnover_db_22618 = models.BigIntegerField(null=True)
-    turnover_db_20212 = models.BigIntegerField(null=True)
-    turnover_cr_20212 = models.BigIntegerField(null=True)
-    saldo_90963 = models.BigIntegerField(null=True)
+    turnover_db_20208 = models.CharField(max_length=25, null=True)
+    turnover_cr_20208 = models.CharField(max_length=25, null=True)
+    turnover_cr_20218 = models.CharField(max_length=25, null=True)
+    turnover_db_20218 = models.CharField(max_length=25, null=True)
+    turnover_db_20212 = models.CharField(max_length=25, null=True)
+    turnover_cr_20212 = models.CharField(max_length=25, null=True)
+    saldo_90963 = models.CharField(max_length=25, null=True)
 
     def __int__(self):
         return self.loan_id
