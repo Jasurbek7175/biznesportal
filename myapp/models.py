@@ -83,7 +83,7 @@ class CreditPay(models.Model):
     turnover_cr_20212 = models.BigIntegerField(null=True)
     saldo_90963 = models.BigIntegerField(null=True)
 
-    def __str__(self):
+    def __int__(self):
         return self.loan_id
 
 

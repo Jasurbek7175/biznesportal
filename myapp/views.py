@@ -119,7 +119,7 @@ def credit_info_from_excel(request):
             ws = wb.active
             instances = []
             for row in ws.iter_rows(min_row=2, values_only=True):
-                if not CreditPay.objects.filter(claim_id=row[0]).exists():
+                if CreditPay.objects.filter(loan_id=row[0]).delete():
                     try:
                         a = CreditPay.objects.create(
                             loan_id=row[0],

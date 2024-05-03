@@ -25,4 +25,5 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('api/v1/', include('myapp.urls')),
                   path('oauth2/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path("__debug__/", include("debug_toolbar.urls")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
