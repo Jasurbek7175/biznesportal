@@ -48,7 +48,7 @@ class Application(models.Model):
     account_16405_sum = models.CharField(max_length=25, null=True)
     account_16413_sum = models.CharField(max_length=25, null=True)
 
-    def __str__(self):
+    def __int__(self):
         return self.loan_id
 
 
@@ -107,3 +107,30 @@ class CreditPayment(models.Model):
 
     def __str__(self):
         return self.cl_name
+
+
+class AddClients(models.Model):
+    client_type = models.CharField(max_length=50)
+    client_id = models.BigIntegerField()
+    client_name = models.CharField(max_length=120)
+    nibbd_code = models.CharField(max_length=10)
+    doc_date = models.DateField()
+    doc_status = models.CharField(max_length=20)
+    doc_guid = models.CharField(max_length=100)
+    doc_pin = models.CharField(max_length=15)
+    credit_sum = models.CharField(max_length=20)
+    credit_term = models.IntegerField()
+    credit_privilege_month = models.IntegerField()
+    doc_num = models.IntegerField()
+    credit_percent = models.IntegerField()
+    workers = models.IntegerField()
+    credit_type = models.CharField(max_length=4)
+    region_code = models.IntegerField()
+    district_code = models.IntegerField()
+    branch_id = models.CharField(max_length=6)
+    update_date = models.DateField()
+    update_id = models.IntegerField()
+
+
+    def __str__(self):
+        return self.client_name

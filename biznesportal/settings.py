@@ -61,6 +61,7 @@ LOGIN_REDIRECT_URL = 'home'
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': ["%Y-%m-%d"],
+    # 'DATETIME_FORMAT': ["%d.%m.%Y"],
 
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -169,10 +170,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_DIR = 'static'
-MEDIA_DIR = 'media'
+STATIC_DIR = 'static/'
+MEDIA_DIR = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
+STATICFILES_DIRS = (str(BASE_DIR.joinpath("static")),)
+
 
 STATIC_DIRS = (
     os.path.join(BASE_DIR, 'static'),
@@ -220,3 +223,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+
+
