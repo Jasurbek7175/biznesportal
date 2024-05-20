@@ -464,10 +464,10 @@ decode(j.INCOMFL, '1', j.RNN_CR, j.RNN_CL) as cl_id ,
        """
     r = []
     if sql_request:
-        p_username = "Colvir"
-        p_password = "ColvirTuron"
-        p_dns = "192.168.7.152/CBSPROD"
-        p_port = "1521"
+        p_username = ""
+        p_password = ""
+        p_dns = ""
+        p_port = ""
 
         with oracledb.connect(
                 user=p_username, password=p_password, dsn=p_dns, port=p_port
