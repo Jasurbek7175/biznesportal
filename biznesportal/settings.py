@@ -176,6 +176,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
 STATICFILES_DIRS = (str(BASE_DIR.joinpath("static")),)
 
+CSRF_TRUSTED_ORIGINS = ['https://brb.turonbank.uz']
 
 STATIC_DIRS = (
     os.path.join(BASE_DIR, 'static'),

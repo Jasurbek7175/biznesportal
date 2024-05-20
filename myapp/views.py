@@ -406,7 +406,7 @@ j.code_bcl as branch_id,
 j.code_bcl as cl_mfo,
 a.code as cl_account,
 j.TXT_PAY as cl_name,
-decode(j.INCOMFL, '1', j.RNN_CR, j.RNN_CL) as cl_id , 
+decode(j.INCOMFL, '1', j.RNN_CR, j.RNN_CL) as cl_id, 
        j.code_bcr as ca_mfo,
               decode(j.INCOMFL, '1', j.CODE_ACL, j.CODE_ACR) as ca_account,
              j.txt_ben as ca_name,
@@ -462,6 +462,7 @@ decode(j.INCOMFL, '1', j.RNN_CR, j.RNN_CL) as cl_id ,
    and t.incomfl = 1
    and t.doper between to_date('28.02.2024', 'dd.mm.yyyy') and to_date('15.05.2024', 'dd.mm.yyyy')
        """
+
     r = []
     if sql_request:
         p_username = "Colvir"
